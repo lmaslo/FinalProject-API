@@ -23,7 +23,30 @@ public class BookStore {
         RestAssured.baseURI = "https://demoqa.com";
     }
 
-    //Авторизация
+    @Test
+    void Auth() {
+        CredentialsLombok credentials = new CredentialsLombok();
+        credentials.setUserName("LenaTest");
+        credentials.setPassword("LenaTest123!");
+
+        given()
+                .filter(withCustomTemplates())
+                .log().uri()
+                .log().body()
+                .contentType(JSON)
+                .body(credentials)
+                .when()
+                .post("/Account/v1/Authorized")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(200);
+    }
+
+
+    //Авторизация + добавить схему и проверки ответа, Сделать заголовок
+    //некорректный логин
+    //Некорректный пароль
 //страница профиля
 
     @Test
