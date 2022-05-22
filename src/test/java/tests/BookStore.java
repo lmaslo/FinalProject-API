@@ -4,6 +4,7 @@ import io.qameta.allure.Description;
 import io.restassured.RestAssured;
 import models.CredentialsLombok;
 import models.GenerateTokenResponseLombok;
+import models.GetBookLombok;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,10 @@ public class BookStore {
     }
 
     @Test
+    @DisplayName("Запрос /Account/v1/Authorized")
+    @Description(
+            "Проверка авторизации с корректными данными"
+    )
     void AuthSuccess() {
         CredentialsLombok credentials = new CredentialsLombok();
         credentials.setUserName("LenaTest");
@@ -43,6 +48,10 @@ public class BookStore {
     }
 
     @Test
+    @DisplayName("Запрос /Account/v1/Authorized")
+    @Description(
+            "Проверка авторизации с не существующим UserName"
+    )
     void AuthInvalidUser() {
         CredentialsLombok credentials = new CredentialsLombok();
         credentials.setUserName("LenaTest1");
@@ -65,6 +74,10 @@ public class BookStore {
     }
 
     @Test
+    @DisplayName("Запрос /Account/v1/Authorized")
+    @Description(
+            "Проверка авторизации с не некорректным паролем"
+    )
     void AuthInvalidPassword() {
         CredentialsLombok credentials = new CredentialsLombok();
         credentials.setUserName("LenaTest");
@@ -87,7 +100,13 @@ public class BookStore {
     }
 
     @Test
-    void generateToken (){
+    @DisplayName("Запрос Account/v1/GenerateToken")
+    @Description(
+            "Проверка генерации токена. " +
+                    "Код ответа. " +
+                    "Соответствие схеме json"
+    )
+    void generateToken() {
         CredentialsLombok credentials = new CredentialsLombok();
         credentials.setUserName("LenaTest");
         credentials.setPassword("LenaTest123!");
@@ -115,9 +134,53 @@ public class BookStore {
     }
 
 
-    //Список книг запрос без параметров схема /BookStore/v1/Books
-    // Просмотре информации о книги /BookStore/v1/Book
+    @Test
+    @DisplayName("Запрос /BookStore/v1/Books")
+    @Description(
+            "Проверка запроса - список книг. " +
+                    "Код ответа. " +
+                    "Соответствие схеме json"
+    )
+    void getBooks() {
+        given()
+                .filter(withCustomTemplates())
+                .log().uri()
+                .log().body()
+                .get("/BookStore/v1/Books")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("schemas/GetBooks_scheme.json"));
+    }
 
+    @Test
+    @DisplayName("Запрос /BookStore/v1/Book")
+    @Description(
+            "Проверка запроса с заданным параметром ISBN=9781449331818. " +
+                    "Код ответа. " +
+                    "Проверка параметров в ответе Isbn, Title, Author"
+    )
+    void getBook() {
+
+        String idBook = "9781449331818";
+
+        GetBookLombok getBookResponse =
+                given()
+                        .filter(withCustomTemplates())
+                        .log().uri()
+                        .log().body()
+                        .get("/BookStore/v1/Book?ISBN={idBook}", idBook)
+                        .then()
+                        .log().status()
+                        .log().body()
+                        .statusCode(200)
+                        .extract().as(GetBookLombok.class);
+
+        assertThat(getBookResponse.getIsbn()).isEqualTo(idBook);
+        assertThat(getBookResponse.getTitle()).isEqualTo("Learning JavaScript Design Patterns");
+        assertThat(getBookResponse.getAuthor()).isEqualTo("Addy Osmani");
+    }
 
 
 }
