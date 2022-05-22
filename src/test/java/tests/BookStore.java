@@ -13,8 +13,7 @@ import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static listeners.CustomAllureListener.withCustomTemplates;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 public class BookStore {
 
@@ -24,7 +23,7 @@ public class BookStore {
     }
 
     @Test
-    void Auth() {
+    void AuthSuccess() {
         CredentialsLombok credentials = new CredentialsLombok();
         credentials.setUserName("LenaTest");
         credentials.setPassword("LenaTest123!");
@@ -43,37 +42,55 @@ public class BookStore {
                 .statusCode(200);
     }
 
-
-    //Авторизация + добавить схему и проверки ответа, Сделать заголовок
-    //некорректный логин
-    //Некорректный пароль
-//страница профиля
-
     @Test
-    @DisplayName("Запрос BookStore/v1/Books")
-    @Description(
-            "Проверка, что запрос BookStore/v1/Books, возвращает статус 200 и количество книг больше чем 0"
-    )
-    void getBookTest() {
+    void AuthInvalidUser() {
+        CredentialsLombok credentials = new CredentialsLombok();
+        credentials.setUserName("LenaTest1");
+        credentials.setPassword("LenaTest123!");
+
         given()
                 .filter(withCustomTemplates())
                 .log().uri()
                 .log().body()
-                .get("/BookStore/v1/Books")
+                .contentType(JSON)
+                .body(credentials)
+                .when()
+                .post("/Account/v1/Authorized")
                 .then()
                 .log().status()
                 .log().body()
-                .body("books", hasSize(greaterThan(0)))
-                .statusCode(200);
+                .statusCode(404)
+                .body("message", is("User not found!"))
+                .body("code", is("1207"));
     }
 
     @Test
-    void generateTokenWithLombokTest() {
-
+    void AuthInvalidPassword() {
         CredentialsLombok credentials = new CredentialsLombok();
-        credentials.setUserName("alex");
-        credentials.setPassword("asdsad#frew_DFS2");
+        credentials.setUserName("LenaTest");
+        credentials.setPassword("LenaTest123");
 
+        given()
+                .filter(withCustomTemplates())
+                .log().uri()
+                .log().body()
+                .contentType(JSON)
+                .body(credentials)
+                .when()
+                .post("/Account/v1/Authorized")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(404)
+                .body("message", is("User not found!"))
+                .body("code", is("1207"));
+    }
+
+    @Test
+    void generateToken (){
+        CredentialsLombok credentials = new CredentialsLombok();
+        credentials.setUserName("LenaTest");
+        credentials.setPassword("LenaTest123!");
 
         GenerateTokenResponseLombok tokenResponse =
                 given()
@@ -95,6 +112,12 @@ public class BookStore {
         assertThat(tokenResponse.getResult()).isEqualTo("User authorized successfully.");
         assertThat(tokenResponse.getExpires()).hasSizeGreaterThan(10);
         assertThat(tokenResponse.getToken()).hasSizeGreaterThan(10).startsWith("eyJ");
-
     }
+
+
+    //Список книг запрос без параметров схема /BookStore/v1/Books
+    // Просмотре информации о книги /BookStore/v1/Book
+
+
+
 }
