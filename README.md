@@ -30,9 +30,9 @@
 </p>
 
 ## :man_cook: Jenkins job
-<img src="images/logo/Jenkins.svg" width="25" height="25"  alt="Jenkins"/></a>  <a target="_blank" href="[https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject/](https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/)">Jenkins job</a>
+<img src="images/logo/Jenkins.svg" width="25" height="25"  alt="Jenkins"/></a>  <a target="_blank" href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/">Jenkins job</a>
 <p align="center">
-<a href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/"><img src="images/image/Jenkins.jpg" alt="Jenkins"/></a>
+<a href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/"><img src="images/screen/jenkins.jpg" alt="Jenkins"/></a>
 </p>
 
 
@@ -41,3 +41,11 @@
 gradle clean test
 ```
 
+## :bar_chart: Allure-отчет
+<img src="images/logo/Allure.svg" width="25" height="25"  alt="Allure"/></a> Отчет в <a target="_blank" href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject/3/allure/#graph">Allure report</a>
+<p align="center">
+<a href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject/3/allure/#graph"><img src="images/image/Allure3.jpg" alt="Jenkins"/></a>
+</p>
+<p align="center">
+<a href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject/3/allure/#suites/f65ff973144ec53ed351dc6a47db7338/b8f9bddb75fae127/"><img src="images/image/Allure.jpg" alt="Jenkins"/></a>
+</p>
