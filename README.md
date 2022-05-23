@@ -6,9 +6,7 @@
 - [Реализованные проверки](#boom-Реализованные-проверки)
 - [Технологии](#classical_building-Технологии)
 - [Сборка в Jenkins](#man_cook-Jenkins-job)
-- [Запуск из терминала](#electron-Запуск-тестов-из-терминала)
 - [Allure отчет](#bar_chart-Allure-отчет)
-- [Отчет в Telegram](#envelope-Уведомление-в-Telegram-при-помощи-бота)
 
 ## :boom: Реализованные проверки
 
@@ -30,4 +28,16 @@
 <img width="6%" title="Jenkins" src="images/logo/Jenkins.svg">
 <img width="6%" title="REST Assured" src="images/logo/logo-transparent.png">
 </p>
+
+## :man_cook: Jenkins job
+<img src="images/logo/Jenkins.svg" width="25" height="25"  alt="Jenkins"/></a>  <a target="_blank" href="[https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject/](https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/)">Jenkins job</a>
+<p align="center">
+<a href="https://jenkins.autotests.cloud/job/011-maslogirl-FinalProject-API/"><img src="images/image/Jenkins.jpg" alt="Jenkins"/></a>
+</p>
+
+
+###  Локальный запуск:
+```
+gradle clean test
+```
 
