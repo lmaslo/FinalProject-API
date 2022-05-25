@@ -3,7 +3,7 @@ package models;
 import lombok.Data;
 
 @Data
-public class GenerateTokenResponseLombok {
+public class GenerateTokenResponse {
 
     private String token;
     private String expires;

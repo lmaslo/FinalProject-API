@@ -2,7 +2,8 @@ package models;
 
 import lombok.Data;
 @Data
-public class GetBookLombok {
+public class GetBook {
+
     private String isbn;
     private String title;
     private String subTitle;

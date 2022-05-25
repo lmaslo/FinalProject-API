@@ -2,9 +2,9 @@ package tests;
 
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
-import models.CredentialsLombok;
-import models.GenerateTokenResponseLombok;
-import models.GetBookLombok;
+import models.Credentials;
+import models.GenerateTokenResponse;
+import models.GetBook;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,11 +25,9 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос /Account/v1/Authorized")
-    @Description(
-            "Проверка авторизации с корректными данными"
-    )
+    @Description("Проверка авторизации с корректными данными")
     void AuthSuccess() {
-        CredentialsLombok credentials = new CredentialsLombok();
+        Credentials credentials = new Credentials();
         credentials.setUserName("LenaTest");
         credentials.setPassword("LenaTest123!");
 
@@ -49,11 +47,9 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос /Account/v1/Authorized")
-    @Description(
-            "Проверка авторизации с не существующим UserName"
-    )
+    @Description("Проверка авторизации с не существующим UserName")
     void AuthInvalidUser() {
-        CredentialsLombok credentials = new CredentialsLombok();
+        Credentials credentials = new Credentials();
         credentials.setUserName("LenaTest1");
         credentials.setPassword("LenaTest123!");
 
@@ -75,11 +71,9 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос /Account/v1/Authorized")
-    @Description(
-            "Проверка авторизации с не некорректным паролем"
-    )
+    @Description("Проверка авторизации с некорректным паролем")
     void AuthInvalidPassword() {
-        CredentialsLombok credentials = new CredentialsLombok();
+        Credentials credentials = new Credentials();
         credentials.setUserName("LenaTest");
         credentials.setPassword("LenaTest123");
 
@@ -101,17 +95,13 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос Account/v1/GenerateToken")
-    @Description(
-            "Проверка генерации токена. " +
-                    "Код ответа. " +
-                    "Соответствие схеме json"
-    )
+    @Description("Проверка генерации токена. Код ответа. Соответствие схеме json")
     void generateToken() {
-        CredentialsLombok credentials = new CredentialsLombok();
+        Credentials credentials = new Credentials();
         credentials.setUserName("LenaTest");
         credentials.setPassword("LenaTest123!");
 
-        GenerateTokenResponseLombok tokenResponse =
+        GenerateTokenResponse tokenResponse =
                 given()
                         .filter(withCustomTemplates())
                         .log().uri()
@@ -125,7 +115,7 @@ public class BookStore {
                         .log().body()
                         .statusCode(200)
                         .body(matchesJsonSchemaInClasspath("schemas/GenerateToken_response_scheme.json"))
-                        .extract().as(GenerateTokenResponseLombok.class);
+                        .extract().as(GenerateTokenResponse.class);
 
         assertThat(tokenResponse.getStatus()).isEqualTo("Success");
         assertThat(tokenResponse.getResult()).isEqualTo("User authorized successfully.");
@@ -136,11 +126,7 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос /BookStore/v1/Books")
-    @Description(
-            "Проверка запроса - список книг. " +
-                    "Код ответа. " +
-                    "Соответствие схеме json"
-    )
+    @Description("Проверка запроса - список книг.  Код ответа. Соответствие схеме json")
     void getBooks() {
         given()
                 .filter(withCustomTemplates())
@@ -156,16 +142,13 @@ public class BookStore {
 
     @Test
     @DisplayName("Запрос /BookStore/v1/Book")
-    @Description(
-            "Проверка запроса с заданным параметром ISBN=9781449331818. " +
-                    "Код ответа. " +
-                    "Проверка параметров в ответе Isbn, Title, Author"
+    @Description("Проверка запроса с заданным параметром ISBN=9781449331818. " +
+            "Код ответа. Проверка параметров в ответе Isbn, Title, Author"
     )
     void getBook() {
-
         String idBook = "9781449331818";
 
-        GetBookLombok getBookResponse =
+        GetBook getBookResponse =
                 given()
                         .filter(withCustomTemplates())
                         .log().uri()
@@ -175,12 +158,10 @@ public class BookStore {
                         .log().status()
                         .log().body()
                         .statusCode(200)
-                        .extract().as(GetBookLombok.class);
+                        .extract().as(GetBook.class);
 
         assertThat(getBookResponse.getIsbn()).isEqualTo(idBook);
         assertThat(getBookResponse.getTitle()).isEqualTo("Learning JavaScript Design Patterns");
         assertThat(getBookResponse.getAuthor()).isEqualTo("Addy Osmani");
     }
-
-
 }
